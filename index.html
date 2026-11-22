@@ -41,7 +41,6 @@
       background: #f1f5f9;
     }
 
-    /* Layar Loading Awal */
     #splashLoader {
       position: fixed;
       inset: 0;
@@ -70,7 +69,7 @@
       border-top-color: #fbbf24;
       border-radius: 50%;
       animation: spin 0.85s linear infinite;
-      margin-bottom: 16px;
+      margin: 0 auto 16px auto;
     }
 
     @keyframes spin {
@@ -88,67 +87,23 @@
       color: #a7f3d0;
       margin-top: 4px;
     }
-
-    /* Pesan Peringatan Jika URL Web App Belum Diisi */
-    #setupNotice {
-      display: none;
-      max-width: 440px;
-      background: #ffffff;
-      color: #1e293b;
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-      text-align: left;
-    }
-
-    #setupNotice h2 {
-      font-size: 16px;
-      font-weight: 800;
-      color: #0b3d2e;
-      margin-bottom: 8px;
-    }
-
-    #setupNotice p {
-      font-size: 13px;
-      line-height: 1.5;
-      color: #475569;
-    }
-
-    #setupNotice code {
-      display: block;
-      background: #f1f5f9;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 11px;
-      margin-top: 10px;
-      color: #0f172a;
-      word-break: break-all;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Splash Screen Saat Memuat Google Apps Script -->
+  <!-- Splash Screen Saat Memuat Aplikasi -->
   <div id="splashLoader">
-    <div id="loadingIndicator">
-      <div class="spinner" style="margin-inline: auto;"></div>
+    <div>
+      <div class="spinner"></div>
       <div class="splash-title">JAGA BUTTA</div>
       <div class="splash-sub">Kabupaten Jeneponto • Memuat Sistem...</div>
     </div>
-
-    <div id="setupNotice">
-      <h2>Konfigurasi URL Web App Diperlukan</h2>
-      <p>
-        Buka file <strong>index.html</strong> di repositori GitHub Anda, lalu ganti nilai variabel
-        <strong>GAS_WEB_APP_URL</strong> dengan URL deployment Google Apps Script (berakhiran <code>/exec</code>).
-      </p>
-      <code>const GAS_WEB_APP_URL = "https://script.google.com/macros/s/.../exec";</code>
-    </div>
   </div>
 
-  <!-- Iframe Utama dengan Izin GPS Penuh untuk Peta & Patok Lapangan -->
+  <!-- Iframe Utama dengan Izin GPS Penuh untuk Pemetaan Lapangan -->
   <iframe
     id="appFrame"
+    src="https://script.google.com/macros/s/AKfycbxHXWLm9dsDfEqsPifXcFSWCsI2uFszMclom5xF9Sk/dev"
     title="JAGA BUTTA - Kab. Jeneponto"
     allow="geolocation *; clipboard-read *; clipboard-write *; fullscreen *"
     allowfullscreen
@@ -156,31 +111,17 @@
   </iframe>
 
   <script>
-    // =========================================================================
-    // GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA (/exec)
-    // =========================================================================
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHXWLm9dsDfEqsPifXcFSWCsI2uFszMclom5xF9Sk/dev";
-
     const frame = document.getElementById("appFrame");
     const splash = document.getElementById("splashLoader");
-    const loadingIndicator = document.getElementById("loadingIndicator");
-    const setupNotice = document.getElementById("setupNotice");
 
-    if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("GANTI_DENGAN_ID_DEPLOYMENT_ANDA")) {
-      loadingIndicator.style.display = "none";
-      setupNotice.style.display = "block";
-    } else {
-      frame.src = GAS_WEB_APP_URL;
+    frame.addEventListener("load", () => {
+      splash.classList.add("hidden");
+    });
 
-      frame.addEventListener("load", () => {
-        splash.classList.add("hidden");
-      });
-
-      // Fallback agar splash screen otomatis tertutup maksimal 4 detik
-      setTimeout(() => {
-        splash.classList.add("hidden");
-      }, 4000);
-    }
+    // Otomatis menutup splash screen maksimal 3.5 detik
+    setTimeout(() => {
+      splash.classList.add("hidden");
+    }, 3500);
   </script>
 </body>
 </html>
